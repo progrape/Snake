@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake</title>
+    <style>
+        canvas{ background: #000; margin: 0 auto; float: left; }
+        p{float: left;margin-left: 30px;}
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800px" height="600px"></canvas>
+    <p>
+        Rank：<span id="rank">0</span><br/><br/>
+        Score: <span id="score">0</span>
+    </p>
+    <audio id="startMusic" src="http://chility.u.qiniudn.com/demo/Snake/music/start.ogg" autoplay="autoplay"></audio>
+    <audio id="bgMusic" src="http://chility.u.qiniudn.com/demo/Snake/music/bgMusic.ogg" loop="loop"></audio>
+    <audio id="fireMusic" src="http://chility.u.qiniudn.com/demo/Snake/music/fire.ogg"></audio>
+    <script src="http://chility.u.qiniudn.com/demo/Snake/scripts/jquery-1.10.2.min.js"></script>
+    <script src="http://chility.u.qiniudn.com/demo/Snake/scripts/snake.js"></script>
+    <script>
+        var startMusic = document.getElementById('startMusic');
+        var bgMusic = document.getElementById('bgMusic');
+        var fireMusic = document.getElementById('fireMusic');
+        var score = 0;
+
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var snake = new Snake(context);
+        snake.init();
+        snake.onEaten = function(){
+            fireMusic.play();
+            score += 10;
+            $('#score').text(score);
+            $('#rank').text(parseInt(score / 50));
+            if(score % 50 == 0){
+                snake.speed -= parseInt(score / 50) * 5;
+            }
+        };
+        snake.onDie = function(){
+            bgMusic.pause();
+        };
+        snake.start();
+
+        startMusic.addEventListener('ended', function(){
+            bgMusic.play();
+        }, false);
+    </script>
+</body>
+</html>
